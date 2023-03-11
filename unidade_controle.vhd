@@ -29,10 +29,8 @@ entity unidade_controle is
         par_correto : in std_logic;     --indica se as duas cartas registradas formam um par
 		
         
-        --saidas para zerar
-        zeraP1 : out std_logic;
-        zeraP2 : out std_logic;
-        zeraRegs : out std_logic;
+        --saida para zerar
+        zera_regs: out std_logic;
 
 
         --saidas de registro
@@ -112,6 +110,8 @@ begin
         finalizado          when Eatual = escreve_mem2 and fim_jogo='1' else
         proximo_jogador     when (Eatual = verifica_pares and par_correto = '0') or (Eatual = escreve_mem2 and par_correto = '1') else
         espera1             when Eatual = proximo_jogador else
+        proximo_jogador     when Eatual = timeout else
+        preparacao          when Eatual = finalizado and iniciar = '1' else
         Eatual;
     
 
@@ -169,6 +169,11 @@ begin
     with Eatual select
         zera_timeout <= '1' when ini_rodada | proxima_jogada,
                         '0' when others;
+
+    --Zera
+    with Eatual select
+        zera_regs <= '1' when preparacao,
+                     '0' when others;
                           
     
     --depuracao
