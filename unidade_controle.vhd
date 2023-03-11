@@ -34,11 +34,9 @@ entity unidade_controle is
 
 
         --saidas de registro
-        reg_en_display1 : out std_logic;
-        reg_en_carta1 : out std_logic;
+        reg_en_display : out std_logic;
+        reg_en_carta : out std_logic;
         reg_en_jogada1 : out std_logic;
-        reg_en_display2 : out std_logic;
-        reg_en_carta2 : out std_logic;
         reg_en_jogada2 : out std_logic;
         --registra os pares na saida da memoria
         reg_en_chute1 : out std_logic;
@@ -64,8 +62,8 @@ entity unidade_controle is
 end entity;
 
 architecture fsm of unidade_controle is
-    type t_estado is (inicial, preparacao, ini_jogo, espera1, registra_display1, registra_carta1, registra_jogada1, verifica_conflito1
-    espera2, registra_display2, registra_carta2, registra_jogada2, verifica_conflito2, verifica_selecao, regisptra_par1, registra_par2,
+    type t_estado is (inicial, preparacao, ini_jogo, espera1, registra_display1, registra_carta1, registra_jogada1, verifica_conflito1,
+    espera2, registra_display2, registra_carta2, registra_jogada2, verifica_conflito2, verifica_selecao, registra_par1, registra_par2,
     verifica_pares, escreve_mem1, escreve_mem2, proximo_jogador, finalizado, esgotado);
     
     signal Eatual, Eprox: t_estado;
@@ -88,8 +86,8 @@ begin
     
     Eprox <=
         inicial             when Eatual = inicial and iniciar='0' else
-        preparacao          when (Eatual=inicial or Eatual=acerto or Eatual=erro or Eatual=esgotado) and iniciar='1' else
-        ini_jogo            when Eatual = preparacao or Eatual = proxima_rodada else
+        preparacao          when (Eatual=inicial or Eatual=finalizado) and iniciar='1' else
+        ini_jogo            when Eatual = preparacao else
         espera1             when Eatual = ini_jogo or (Eatual = espera1 and jogada_display='0' and jogada_carta='0' and time_out='0') or Eatual = registra_display1 or (Eatual= verifica_conflito1 and conflito_mem='1') else
         registra_display1   when Eatual = espera1 and jogada_display='1' else
         registra_carta1     when Eatual = espera1 and jogada_carta='1' else
@@ -100,8 +98,8 @@ begin
         registra_carta2     when Eatual=espera2 and jogada_carta='1' else
         registra_jogada2    when Eatual = registra_carta2 else
         verifica_conflito2  when Eatual=registra_jogada2 else
-        esgotado            when (Etaual = espera1 or Eatual=espera2) and time_out='1' else
-        verifica_selecao    when (Eatual = verfica_conflito2 and conflito_mem='0') else
+        esgotado            when (Eatual = espera1 or Eatual=espera2) and time_out='1' else
+        verifica_selecao    when (Eatual = verifica_conflito2 and conflito_mem='0') else
         registra_par1       when (Eatual=verifica_selecao and igual_selecao = '0') else
         registra_par2       when Eatual = registra_par1 else
         verifica_pares      when Eatual = registra_par2 else
@@ -110,8 +108,7 @@ begin
         finalizado          when Eatual = escreve_mem2 and fim_jogo='1' else
         proximo_jogador     when (Eatual = verifica_pares and par_correto = '0') or (Eatual = escreve_mem2 and par_correto = '1') else
         espera1             when Eatual = proximo_jogador else
-        proximo_jogador     when Eatual = timeout else
-        preparacao          when Eatual = finalizado and iniciar = '1' else
+        proximo_jogador     when Eatual = esgotado else
         Eatual;
     
 
@@ -136,39 +133,32 @@ begin
 
     --saidas de registro
     with Eatual select
-        reg_en_display1 <= '1' when registra_display1,
+        reg_en_display <= '1' when registra_display1 | registra_display2,
                            '0' when others;
     with Eatual select
-        reg_en_carta1 <= '1' when registra_carta1,
+        reg_en_carta <= '1' when registra_carta1 | registra_carta2,
                          '0' when others;
     with Eatual select
         reg_en_jogada1 <= '1' when registra_jogada1,
                           '0' when others;
-                   
-    with Eatual select
-        reg_en_display2 <= '1' when registra_display1,
-                           '0' when others;
-    with Eatual select
-        reg_en_carta2 <= '1' when registra_carta1,
-                         '0' when others;
     with Eatual select
         reg_en_jogada2 <= '1' when registra_jogada1,
                           '0' when others;
 
     --registra  os pares na saida da memoria
     with Eatual select
-        reg_sen_chute1 <= '1' when registra_par1,
+        reg_en_chute1 <= '1' when registra_par1,
                           '0' when others;
     with Eatual select
-        reg_sen_chute2 <= '1' when registra_par2,
+        reg_en_chute2 <= '1' when registra_par2,
                           '0' when others;
     
 
 
     --time out
     with Eatual select
-        zera_timeout <= '1' when ini_rodada | proxima_jogada,
-                        '0' when others;
+        zera_timeout <= '0' when espera1 | espera2,
+                        '1' when others;
 
     --Zera
     with Eatual select
@@ -181,34 +171,34 @@ begin
         db_esgotou <=  '1' when esgotado,
                        '0' when others;				  
     with Eatual select
-        db_estado <= "0000_0000" when inicial,     -- 00
-                     "0000_0001" when preparacao,  -- 01
-                     "0000_0010" when ini_jogo     -- 02
+        db_estado <= "00000000" when inicial,     -- 00
+                     "00000001" when preparacao,  -- 01
+                     "00000010" when ini_jogo,    -- 02
                      
-                     "0001_0000" when espera1,            -- 10
-                     "0001_0001" when registra_display1   -- 11
-                     "0001_0010" when registra_carta1     -- 12
-                     "0001_0011" when registra_jogada1    -- 13
-                     "0001_0011" when verifica_conflito1  -- 14
+                     "00010000" when espera1,             -- 10
+                     "00010001" when registra_display1,   -- 11
+                     "00010010" when registra_carta1,     -- 12
+                     "00010011" when registra_jogada1,    -- 13
+                     "00010011" when verifica_conflito1,  -- 14
 
-                     "0010_0000" when espera2,            -- 20
-                     "0010_0001" when registra_display2   -- 21
-                     "0010_0010" when registra_carta2     -- 22
-                     "0010_0011" when registra_jogada2    -- 23
-                     "0010_0011" when verifica_conflito2  -- 24
+                     "00100000" when espera2,             -- 20
+                     "00100001" when registra_display2,   -- 21
+                     "00100010" when registra_carta2,     -- 22
+                     "00100011" when registra_jogada2,    -- 23
+                     "00100011" when verifica_conflito2,  -- 24
                      
-                     "0100_0000" when verifica_selecao -- 40
-                     "0100_0001" when registra_par1    -- 42
-                     "0100_0010" when registra_par2    -- 43
+                     "01000000" when verifica_selecao, -- 40
+                     "01000001" when registra_par1,    -- 42
+                     "01000010" when registra_par2,    -- 43
 
-                     "0111_0000" when verifica_pares  -- 70
-                     "0111_0001" when escreve_mem1    -- 71
-                     "0111_0010" when escreve_mem2    -- 72
+                     "01110000" when verifica_pares,  -- 70
+                     "01110001" when escreve_mem1,    -- 71
+                     "01110010" when escreve_mem2,    -- 72
 
-                     "1010_1010" when proximo_jogador -- AA
-                     "1110_1110" when esgotado -- EE
-                     "1111_0001" when finalizado -- F1
+                     "10101010" when proximo_jogador, -- AA
+                     "11101110" when esgotado,        -- EE
+                     "11110001" when finalizado,      -- F1
 
-                     "1111_1111" when others;          -- FF
+                     "11111111" when others;          -- FF
 
 end architecture fsm;
