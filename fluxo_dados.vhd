@@ -12,6 +12,7 @@ entity fluxo_dados is
         reg_en_jogada1 	            : in std_logic;
         reg_en_jogada2 	            : in std_logic;
         jogada_seleciona_mux 	    : in std_logic;
+        escreve 	                : in std_logic;
         reg_en_chute1 	            : in std_logic;
         reg_en_chute2 	            : in std_logic;
         troca_jogador 	            : in std_logic;
@@ -20,57 +21,57 @@ entity fluxo_dados is
         zera_timeout 	            : in std_logic;
         conflito_mem 	            : out std_logic;
         igual_selecao 	            : out std_logic;
+        jogada_carta 	            : out std_logic;
+        jogada_display 	            : out std_logic;
         fim_jogo 	                : out std_logic;
         time_out 	                : out std_logic;
         par_correto 	            : out std_logic;
-        pontos_jogador1 	        : out std_logic;
-        pontos_jogador2 	        : out std_logic
+        pontos_jogador1 	        : out std_logic_vector (3 downto 0);
+        pontos_jogador2 	        : out std_logic_vector (3 downto 0)
     );
 end entity fluxo_dados;
 
 architecture estrutural of fluxo_dados is
-
+    
     component demux
         port (
-            SEL : in  bit;
-            I   : in  bit;
-            Y   : out bit;
-            Z   : out bit
+            SEL : in  std_logic;
+            I   : in  std_logic;
+            Y   : out std_logic;
+            Z   : out std_logic
         );
     end component;
 
     component mux
         port (
-            SEL : in  bit;
-            I   : in  bit_vector (1 downto 0);
-            Y   : out bit
+            SEL : in  std_logic;
+            I   : in  std_logic_vector (4 downto 0);
+            J   : in  std_logic_vector (4 downto 0);
+            Y   : out std_logic_vector (4 downto 0)
         );
     end component;
 
     component codificador_7_3
         port (
-            A : in bit_vector (6 downto 0);
-            Y : out bit_vector (2 downto 0)
+            A : in std_logic_vector (6 downto 0);
+            Y : out std_logic_vector (2 downto 0)
         );
     end component;
 
     component codificador_4_2
         port (
-            A : in bit_vector (3 downto 0);
-            Y : out bit_vector (1 downto 0)
+            A : in std_logic_vector (3 downto 0);
+            Y : out std_logic_vector (1 downto 0)
         );
     end component;
 
-    component contador_163
+    component contador_bit
         port (
-            clock : in  std_logic;
-            clr   : in  std_logic;
-            ld    : in  std_logic;
-            ent   : in  std_logic;
-            enp   : in  std_logic;
-            D     : in  std_logic_vector (3 downto 0);
-            Q     : out std_logic_vector (3 downto 0);
-            rco   : out std_logic 
+            clock   : in  std_logic;
+            zera_as : in  std_logic;
+            zera_s  : in  std_logic;
+            conta   : in  std_logic;
+            Q       : out std_logic
         );
     end component;
 
@@ -170,19 +171,13 @@ architecture estrutural of fluxo_dados is
         );
     end component;
 
-    signal s_enderecoCR    : std_logic_vector (3 downto 0);
-    signal s_jogada     : std_logic_vector (3 downto 0);
-    signal s_not_zeraE    : std_logic;
-    signal s_not_zeraCR    : std_logic;
-    signal s_chaveacionada : std_logic;
-
     signal s_escolha_display_codififcado    : std_logic_vector (1 downto 0);
     signal s_escolha_carta_codififcado      : std_logic_vector (2 downto 0);
     signal s_posicao_escolhida              : std_logic_vector (4 downto 0);
     signal s_escolha1                       : std_logic_vector (4 downto 0);
     signal s_escolha2                       : std_logic_vector (4 downto 0);
     signal s_endereco                       : std_logic_vector (4 downto 0);
-    signal s_invalid                        : std_logic;
+    signal s_invalid                        : std_logic_vector (3 downto 0) := "1111";
     signal s_not_escreve                    : std_logic;
     signal s_seleciona_jogador              : std_logic;
     signal s_conta_ponto_jogador1           : std_logic;
@@ -196,10 +191,7 @@ begin
 
     -- sinais de controle ativos em alto
     -- sinais dos componentes ativos em baixo
-    s_not_zeraCR    <= not zeraCR;
-    s_not_zeraE  <= not zeraE;
-    s_not_escreve <= not escreve;
-    chaveacionada <= chaves(0) or chaves(1) or chaves(2) or chaves(3);       
+    s_not_escreve <= not escreve;     
 
     r1: registrador_n
         generic map (
@@ -210,8 +202,8 @@ begin
             clear => zera_regs, 
             enable => reg_en_display,
             D => s_escolha_display_codififcado,
-            Q(4) => s_posicao_escolhida(1),
-            Q(3) => s_posicao_escolhida(0)
+            Q(1) => s_posicao_escolhida(4),
+            Q(0) => s_posicao_escolhida(3)
         );
 
     r2: registrador_n
@@ -284,7 +276,7 @@ begin
             o_AEQB => igual_selecao
         );
 
-    mux: mux
+    mux_dut: mux
         port map(
             SEL => jogada_seleciona_mux,
             I   => s_escolha1,
@@ -300,7 +292,7 @@ begin
             dado_entrada => s_invalid,
             we           => s_not_escreve,-- we ativo em baixo
             ce           => '0',
-            dado_saida   => s_animal
+            dado_saida   => s_animal_mem
         );
 
     comparador_invalid: comparador_4bits
@@ -363,8 +355,7 @@ begin
             o_AEQB => par_correto
         );
 
-    contador_troca_jogador: contador_m 
-        generic map (M => 1) 
+    contador_troca_jogador: contador_bit 
         port map (
             clock => clock,
             zera_as => zera_regs,
@@ -373,9 +364,9 @@ begin
             Q => s_seleciona_jogador
         );  
 
-    demux: demux
+    demux_dut: demux
         port map(
-            SEL => jogada_seleciona_mux,
+            SEL => s_seleciona_jogador,
             I   => conta_player,
             Y   => s_conta_ponto_jogador1,
             Z   => s_conta_ponto_jogador2
@@ -408,7 +399,7 @@ begin
             zera_as => zera_regs,
             zera_s => '0',
             conta => conta_player,
-            rco => fim_jogo
+            fim => fim_jogo
         );
 
     timeout_counter: timeout port map(
@@ -416,4 +407,20 @@ begin
         reset => zera_timeout,
         time_out => time_out
     ); 
+
+    detector_display: edge_detector
+        port map (
+			  clock => clock,
+			  reset => zera_regs,
+			  sinal => (escolha_display(0) or escolha_display(1) or escolha_display(2) or escolha_display(3)),
+			  pulso => jogada_display
+        );
+
+    detector_carta: edge_detector
+        port map (
+			  clock => clock,
+			  reset => zera_regs,
+			  sinal => (escolha_carta(0) or escolha_carta(1) or escolha_carta(2) or escolha_carta(3) or escolha_carta(4) or escolha_carta(5) or escolha_carta(6)),
+			  pulso => jogada_carta
+        );
 end architecture estrutural;

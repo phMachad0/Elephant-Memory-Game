@@ -8,11 +8,14 @@
 --     Data        Versao  Autor             Descricao
 --     11/03/2023  1.0     Pedro Machado     criacao
 -------------------------------------------------------------------
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.math_real.all;
 
 entity codificador_7_3 is
   port (
-    A : in bit_vector (6 downto 0);
-    Y : out bit_vector (2 downto 0)
+    A : in std_logic_vector (6 downto 0);
+    Y : out std_logic_vector (2 downto 0)
     );
 end entity codificador_7_3;
 
@@ -26,6 +29,6 @@ begin
     "011" when "0001000",
     "100" when "0010000",
     "101" when "0100000",    
-    "111" when "1000000"; 
+    "111" when "1000000", 
     "000" when others; 
 end architecture arch_cod_7_3;
