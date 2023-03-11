@@ -185,13 +185,17 @@ architecture estrutural of fluxo_dados is
     signal s_animal_mem                     : std_logic_vector (3 downto 0);
     signal s_animal_chute1                  : std_logic_vector (3 downto 0);
     signal s_animal_chute2                  : std_logic_vector (3 downto 0);
+    signal s_sinal_display                  : std_logic;
+    signal s_sinal_carta                    : std_logic;
 
     
 begin
 
     -- sinais de controle ativos em alto
     -- sinais dos componentes ativos em baixo
-    s_not_escreve <= not escreve;     
+    s_not_escreve <= not escreve;  
+    s_sinal_display <= escolha_display(0) or escolha_display(1) or escolha_display(2) or escolha_display(3); 
+    s_sinal_carta <= escolha_carta(0) or escolha_carta(1) or escolha_carta(2) or escolha_carta(3) or escolha_carta(4) or escolha_carta(5) or escolha_carta(6);
 
     r1: registrador_n
         generic map (
@@ -412,7 +416,7 @@ begin
         port map (
 			  clock => clock,
 			  reset => zera_regs,
-			  sinal => (escolha_display(0) or escolha_display(1) or escolha_display(2) or escolha_display(3)),
+			  sinal => s_sinal_display,
 			  pulso => jogada_display
         );
 
@@ -420,7 +424,7 @@ begin
         port map (
 			  clock => clock,
 			  reset => zera_regs,
-			  sinal => (escolha_carta(0) or escolha_carta(1) or escolha_carta(2) or escolha_carta(3) or escolha_carta(4) or escolha_carta(5) or escolha_carta(6)),
+			  sinal => s_sinal_carta,
 			  pulso => jogada_carta
         );
 end architecture estrutural;
