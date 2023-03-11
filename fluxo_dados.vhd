@@ -27,7 +27,8 @@ entity fluxo_dados is
         time_out 	                : out std_logic;
         par_correto 	            : out std_logic;
         pontos_jogador1 	        : out std_logic_vector (3 downto 0);
-        pontos_jogador2 	        : out std_logic_vector (3 downto 0)
+        pontos_jogador2 	        : out std_logic_vector (3 downto 0);
+        pontos_total                : out std_logic_vector (3 downto 0)
     );
 end entity fluxo_dados;
 
@@ -399,7 +400,8 @@ begin
             zera_as => zera_regs,
             zera_s => '0',
             conta => conta_player,
-            fim => fim_jogo
+            fim => fim_jogo,
+            Q => pontos_total
         );
 
     timeout_counter: timeout port map(
