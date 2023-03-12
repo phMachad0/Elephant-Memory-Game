@@ -378,7 +378,7 @@ begin
         ); 
 
     contador_pontos_jogador1: contador_m 
-        generic map (M => 14) 
+        generic map (M => 15) 
         port map (
             clock => clock,
             zera_as => zera_regs,
@@ -388,7 +388,7 @@ begin
         ); 
 
     contador_pontos_jogador2: contador_m 
-        generic map (M => 14) 
+        generic map (M => 15) 
         port map (
             clock => clock,
             zera_as => zera_regs,
@@ -398,7 +398,7 @@ begin
         ); 
 
     contador_pares_encontrados: contador_m 
-        generic map (M => 14) 
+        generic map (M => 15) 
         port map (
             clock => clock,
             zera_as => zera_regs,
