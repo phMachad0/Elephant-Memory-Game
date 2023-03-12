@@ -142,7 +142,7 @@ begin
         reg_en_jogada1 <= '1' when registra_jogada1,
                           '0' when others;
     with Eatual select
-        reg_en_jogada2 <= '1' when registra_jogada1,
+        reg_en_jogada2 <= '1' when registra_jogada2,
                           '0' when others;
 
     --registra  os pares na saida da memoria
