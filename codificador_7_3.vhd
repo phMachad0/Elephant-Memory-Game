@@ -29,6 +29,6 @@ begin
     "011" when "0001000",
     "100" when "0010000",
     "101" when "0100000",    
-    "111" when "1000000", 
+    "110" when "1000000", 
     "000" when others; 
 end architecture arch_cod_7_3;
