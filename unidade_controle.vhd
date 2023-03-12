@@ -188,8 +188,8 @@ begin
                      "00100011" when verifica_conflito2,  -- 24
                      
                      "01000000" when verifica_selecao, -- 40
-                     "01000001" when registra_par1,    -- 42
-                     "01000010" when registra_par2,    -- 43
+                     "01000001" when registra_par1,    -- 41
+                     "01000010" when registra_par2,    -- 42
 
                      "01110000" when verifica_pares,  -- 70
                      "01110001" when escreve_mem1,    -- 71

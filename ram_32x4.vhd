@@ -79,21 +79,21 @@ architecture ram_modelsim of ram_32x4 is
                                         "1110", -- posicao 14 (01110)
                                         "1111", -- posicao 15 (01111) (invalida)
                                         "0001", -- posicao 16 (10000)
-                                        "0010", -- posicao 17 (10000)
-                                        "0011", -- posicao 18 (00100)
-                                        "0100", -- posicao 19 (00100)
-                                        "0101", -- posicao 20 (00100)
-                                        "0110", -- posicao 21 (00100)
-                                        "0111", -- posicao 22 (00100)
-                                        "1111", -- posicao 23 (invalida)
-                                        "1000", -- posicao 24
-                                        "1001", -- posicao 25
-                                        "1010", -- posicao 26
-                                        "1011", -- posicao 27
-                                        "1100", -- posicao 28
-                                        "1101", -- posicao 29
-                                        "1110", -- posicao 30
-                                        "1111");  -- posicao 31 (invalida)
+                                        "0010", -- posicao 17 (10001)
+                                        "0011", -- posicao 18 (10010)
+                                        "0100", -- posicao 19 (10011)
+                                        "0101", -- posicao 20 (10100)
+                                        "0110", -- posicao 21 (10101)
+                                        "0111", -- posicao 22 (10110)
+                                        "1111", -- posicao 23 (10111)(invalida)
+                                        "1000", -- posicao 24 (11000)
+                                        "1001", -- posicao 25 (11001)
+                                        "1010", -- posicao 26 (11010)
+                                        "1011", -- posicao 27 (11011)
+                                        "1100", -- posicao 28 (11100)
+                                        "1101", -- posicao 29 (11101)
+                                        "1110", -- posicao 30 (11110)
+                                        "1111");  -- posicao 31 (11111)(invalida)
                                         
   
 begin
