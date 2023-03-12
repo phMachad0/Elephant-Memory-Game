@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------
--- Arquivo   : elephant_memory_tb_cenario1.vhd
+-- Arquivo   : elephant_memory_tb_cenario2.vhd
 -- Projeto   : Elephant-Memory-Game
 --------------------------------------------------------------------------
 -- Descricao : modelo de testbench para simulação com ModelSim
@@ -13,10 +13,10 @@ use ieee.std_logic_1164.all;
 use std.textio.all;
 
 -- entidade do testbench
-entity elephant_memory_tb_cenario1 is
+entity elephant_memory_tb_cenario2 is
 end entity;
 
-architecture tb of elephant_memory_tb_cenario1 is
+architecture tb of elephant_memory_tb_cenario2 is
 
   -- Componente a ser testado (Device Under Test -- DUT)
   component elephant_memory
@@ -140,84 +140,37 @@ begin
     wait for 8*clockPeriod;
     botoes_carta_in <= "0000000";
 
+    caso <= 7;
     wait for 8*clockPeriod;
 
-    caso <= 7;
     botoes_display_in <= "0001"; 
     wait for 8*clockPeriod;
     botoes_display_in <= "0000";	 
     wait for 8*clockPeriod;
-    botoes_carta_in <= "0000010"; -- posicao 1 da mem
+    botoes_carta_in <= "0000100"; -- posicao 2 da mem
     wait for 8*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
     caso <= 8;
-    botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
-    botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
-    botoes_carta_in <= "0001000"; -- posicao 3 da mem
-    wait for 8*clockPeriod;
-    botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+    wait for 12000*clockPeriod;
+
     caso <= 9;
     botoes_display_in <= "0001"; 
     wait for 8*clockPeriod;
     botoes_display_in <= "0000";	 
     wait for 8*clockPeriod;
-    botoes_carta_in <= "0001000"; -- posicao 3 da mem
+    botoes_carta_in <= "0000100"; -- posicao 2 da mem
     wait for 8*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+    wait for 8*clockPeriod;
     caso <= 10;
-    botoes_display_in <= "0100"; 
+    botoes_display_in <= "0100";
     wait for 8*clockPeriod;
     botoes_display_in <= "0000";	 
     wait for 8*clockPeriod;
-    botoes_carta_in <= "0001000"; -- posicao 19 da mem
-    wait for 8*clockPeriod;
-    botoes_carta_in <= "0000000";
-
-    caso <= 11;
-	  wait for 8*clockPeriod;
-    botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
-    botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
-    botoes_carta_in <= "0010000"; -- posicao 4 da mem
+    botoes_carta_in <= "0000100"; -- posicao 18 da mem
     wait for 8*clockPeriod;
     botoes_carta_in <= "0000000";
 	  wait for 8*clockPeriod;
-    caso <= 12;
-    botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
-    botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
-    botoes_carta_in <= "0100000"; -- posicao 5 da mem
-    wait for 8*clockPeriod;
-    botoes_carta_in <= "0000000";
-
-    caso <= 13;
-	  wait for 8*clockPeriod;
-    botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
-    botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
-    botoes_carta_in <= "0010000"; -- posicao 4 da mem
-    wait for 8*clockPeriod;
-    botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
-    caso <= 14;
-    botoes_display_in <= "0100"; 
-    wait for 8*clockPeriod;
-    botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
-    botoes_carta_in <= "0010000"; -- posicao 20 da mem
-    wait for 8*clockPeriod;
-    botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
-
-
     ---- final do testbench
     assert false report "fim da simulacao" severity note;
     keep_simulating <= '0';
