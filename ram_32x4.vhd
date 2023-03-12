@@ -62,38 +62,39 @@ end architecture ram_mif;
 architecture ram_modelsim of ram_32x4 is
   type   arranjo_memoria is array(0 to 31) of std_logic_vector(3 downto 0);
   signal memoria : arranjo_memoria := (
-                                        "0001",
-                                        "0010",
-                                        "0100",
-                                        "1000",
-                                        "0100",
-                                        "0010",
-                                        "0001",
-                                        "0001",
-                                        "0010",
-                                        "0010",
-                                        "0100",
-                                        "0100",
-                                        "1000",
-                                        "1000",
-                                        "0001",
-                                        "0100",
-                                        "0001",
-                                        "0010",
-                                        "0100",
-                                        "1000",
-                                        "0100",
-                                        "0010",
-                                        "0001",
-                                        "0001",
-                                        "0010",
-                                        "0010",
-                                        "0100",
-                                        "0100",
-                                        "1000",
-                                        "1000",
-                                        "0001",
-                                        "0100" );
+                                        "0001", -- posicao 0 (00000)
+                                        "0010", -- posicao 1 (00001)
+                                        "0011", -- posicao 2 (00010)
+                                        "0100", -- posicao 3 (00011)
+                                        "0101", -- posicao 4 (00100)
+                                        "0110", -- posicao 5 (00101)
+                                        "0111", -- posicao 6 (00110)
+                                        "1111", -- posicao 7 (00111) (invalida)
+                                        "1000", -- posicao 8 (01000)
+                                        "1001", -- posicao 9 (01001)
+                                        "1010", -- posicao 10 (01010)
+                                        "1011", -- posicao 11 (01011)
+                                        "1100", -- posicao 12 (01100)
+                                        "1101", -- posicao 13 (01101)
+                                        "1110", -- posicao 14 (01110)
+                                        "1111", -- posicao 15 (01111) (invalida)
+                                        "0001", -- posicao 16 (10000)
+                                        "0010", -- posicao 17 (10000)
+                                        "0011", -- posicao 18 (00100)
+                                        "0100", -- posicao 19 (00100)
+                                        "0101", -- posicao 20 (00100)
+                                        "0110", -- posicao 21 (00100)
+                                        "0111", -- posicao 22 (00100)
+                                        "1111", -- posicao 23 (invalida)
+                                        "1000", -- posicao 24
+                                        "1001", -- posicao 25
+                                        "1010", -- posicao 26
+                                        "1011", -- posicao 27
+                                        "1100", -- posicao 28
+                                        "1101", -- posicao 29
+                                        "1110", -- posicao 30
+                                        "1111");  -- posicao 31 (invalida)
+                                        
   
 begin
 
