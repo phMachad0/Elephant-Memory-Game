@@ -27,6 +27,7 @@ entity unidade_controle is
         conflito_mem : in std_logic;    --indica se a carta selecionada ja foi "eliminada" previamente
         igual_selecao : in std_logic;   --indica se uma unica carta foi selecionada duas vezes
         par_correto : in std_logic;     --indica se as duas cartas registradas formam um par
+        fim_display : in std_logic;  
 		
         
         --saida para zerar
@@ -57,14 +58,17 @@ entity unidade_controle is
         
         --depuracao
 		db_esgotou : out std_logic;
-        db_estado : out std_logic_vector(7 downto 0)
+        db_estado : out std_logic_vector(7 downto 0);
+
+        opcode : out std_logic_vector(3 downto 0)
     );
 end entity;
 
 architecture fsm of unidade_controle is
     type t_estado is (inicial, preparacao, ini_jogo, espera1, registra_display1, registra_carta1, registra_jogada1, verifica_conflito1,
     espera2, registra_display2, registra_carta2, registra_jogada2, verifica_conflito2, verifica_selecao, registra_par1, registra_par2,
-    verifica_pares, escreve_mem1, escreve_mem2, proximo_jogador, finalizado, esgotado);
+    verifica_pares, escreve_mem1, escreve_mem2, proximo_jogador, finalizado, esgotado, conflito_display1, conflito_display2, conflito_display, animal1_display, 
+    animal2_display, cartas_sel_display, certo_display, errado_display, registra_display, reset_timeout1, reset_timeout2);
     
     signal Eatual, Eprox: t_estado;
 begin
@@ -88,27 +92,38 @@ begin
         inicial             when Eatual = inicial and iniciar='0' else
         preparacao          when (Eatual=inicial or Eatual=finalizado) and iniciar='1' else
         ini_jogo            when Eatual = preparacao else
-        espera1             when Eatual = ini_jogo or (Eatual = espera1 and jogada_display='0' and jogada_carta='0' and time_out='0') or Eatual = registra_display1 or (Eatual= verifica_conflito1 and conflito_mem='1') else
+        reset_timeout1      when Eatual = ini_jogo else
+        espera1             when Eatual = reset_timeout1 or (Eatual = espera1 and jogada_display='0' and jogada_carta='0' and time_out='0') or Eatual = registra_display1 or (Eatual= conflito_display1 and fim_display = '1') else
         registra_display1   when Eatual = espera1 and jogada_display='1' else
         registra_carta1     when Eatual = espera1 and jogada_carta='1' else
         registra_jogada1    when Eatual = registra_carta1 else
         verifica_conflito1  when Eatual = registra_jogada1 else
-        espera2             when (Eatual = verifica_conflito1 and conflito_mem='0') or (Eatual = espera2 and jogada_display='0' and jogada_carta='0' and time_out='0') or Eatual=registra_display2 or (Eatual=verifica_conflito2 and conflito_mem='1') or (Eatual=verifica_selecao and igual_selecao='1') else
+        conflito_display1   when Eatual = verifica_conflito1 and conflito_mem='1' else
+        animal1_display     when Eatual = verifica_conflito1 and conflito_mem='0' else
+        reset_timeout2      when Eatual = animal1_display and fim_display = '1' else
+        espera2             when (Eatual = reset_timeout2) or (Eatual = espera2 and jogada_display='0' and jogada_carta='0' and time_out='0') or Eatual=registra_display2 or (Eatual=conflito_display2 and fim_display = '1') or (Eatual=conflito_display) else
         registra_display2   when Eatual=espera2 and jogada_display='1' else
         registra_carta2     when Eatual=espera2 and jogada_carta='1' else
         registra_jogada2    when Eatual = registra_carta2 else
         verifica_conflito2  when Eatual=registra_jogada2 else
+        conflito_display2   when Eatual=verifica_conflito2 and conflito_mem='1' else
+        conflito_display    when Eatual=verifica_selecao and igual_selecao='1' else
         esgotado            when (Eatual = espera1 or Eatual=espera2) and time_out='1' else
-        verifica_selecao    when (Eatual = verifica_conflito2 and conflito_mem='0') else
-        registra_par1       when (Eatual=verifica_selecao and igual_selecao = '0') else
+        cartas_sel_display  when (Eatual = verifica_conflito2 and conflito_mem='0') else
+        verifica_selecao    when Eatual=cartas_sel_display and fim_display = '1' else
+        animal2_display     when (Eatual=verifica_selecao and igual_selecao = '0') else
+        registra_par1       when (Eatual=animal2_display and fim_display = '1') else
         registra_par2       when Eatual = registra_par1 else
         verifica_pares      when Eatual = registra_par2 else
-        escreve_mem1        when Eatual = verifica_pares and par_correto='1' else
+        certo_display       when Eatual = verifica_pares and par_correto='1' else
+        registra_display    when (Eatual = certo_display and fim_display='1') else
+        escreve_mem1        when Eatual = registra_display else
         escreve_mem2        when Eatual = escreve_mem1 else
         finalizado          when Eatual = escreve_mem2 and fim_jogo='1' else
-        proximo_jogador     when (Eatual = verifica_pares and par_correto = '0') or (Eatual = escreve_mem2 and par_correto = '1') else
-        espera1             when Eatual = proximo_jogador else
-        proximo_jogador     when Eatual = esgotado else
+        errado_display      when (Eatual = verifica_pares and par_correto = '0') else
+        proximo_jogador     when (Eatual = errado_display and fim_display = '1') or (Eatual = escreve_mem2 and par_correto = '1') else
+        reset_timeout1      when Eatual = proximo_jogador else
+        proximo_jogador     when Eatual = esgotado and fim_display = '1' else
         Eatual;
     
 
@@ -119,7 +134,7 @@ begin
 
     --saidas de manipulacao do fluxo de dados
     with Eatual select
-        jogada_sel_mux <= '1' when verifica_conflito2 | registra_par2 | escreve_mem2,
+        jogada_sel_mux <= '1' when verifica_conflito2 | registra_par2 | escreve_mem2 | animal2_display | animal1_display,
                           '0' when others;
     with Eatual select
         escreve <=  '1' when escreve_mem1 | escreve_mem2,
@@ -157,13 +172,24 @@ begin
 
     --time out
     with Eatual select
-        zera_timeout <= '0' when espera1 | espera2,
+        zera_timeout <= '0' when reset_timeout1 | reset_timeout2,
                         '1' when others;
 
     --Zera
     with Eatual select
         zera_regs <= '1' when preparacao,
                      '0' when others;
+
+    --Opcode
+    with Eatual select
+        opcode <= "0100" when conflito_display1 | conflito_display2 | conflito_display,
+                  "0101" when animal1_display | animal2_display,
+                  "1011" when cartas_sel_display,
+                  "0111" when errado_display | esgotado,
+                  "0110" when certo_display,
+                  "1000" when registra_display,
+                  "1111" when finalizado,
+                  "0000" when others;
                           
     
     --depuracao
@@ -174,7 +200,8 @@ begin
         db_estado <= "00000000" when inicial,     -- 00
                      "00000001" when preparacao,  -- 01
                      "00000010" when ini_jogo,    -- 02
-                     
+                     "00000011" when reset_timeout1, -- 03
+                     "00000100" when reset_timeout2, -- 04
                      "00010000" when espera1,             -- 10
                      "00010001" when registra_display1,   -- 11
                      "00010010" when registra_carta1,     -- 12

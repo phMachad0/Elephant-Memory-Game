@@ -44,6 +44,9 @@ architecture estrutural of fluxo_dados is
     end component;
 
     component mux
+        generic(
+            constant M : integer := 4 
+        );
         port (
             SEL : in  std_logic;
             I   : in  std_logic_vector (4 downto 0);
@@ -282,6 +285,9 @@ begin
         );
 
     mux_dut: mux
+        generic map (
+            m => 5
+        )
         port map(
             SEL => jogada_seleciona_mux,
             I   => s_escolha1,
