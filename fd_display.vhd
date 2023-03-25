@@ -115,6 +115,8 @@ architecture beh of FD_display is
     signal placar1p, placar2p: std_logic_vector(6 downto 0);
     signal enderecos_memoria: std_logic_vector(39 downto 0);
     signal piscada: std_logic_vector(8 downto 0);
+
+    signal placar1p_not, placar2p_not: in std_logic_vector(6 downto 0)
 begin
     text_memory: ram_32x42 port map(
         clk => clock,
@@ -133,7 +135,7 @@ begin
     );
     placar_display <= idle_display & placar1p & placar2p;
 
-    conta_tempo_texto: contador_m generic map(m => 1000) port map(
+    conta_tempo_texto: contador_m generic map(m => 4) port map(
         clock   => clock ,
         zera_as => reset,
         zera_s  => zera_timer_texto,
@@ -178,11 +180,14 @@ begin
 
     HEX0: hexa7seg port map(
         hexa => placar1,
-        sseg => placar1p
+        sseg => placar1p_not
     );
+    placar1p <= placar1p_not;
 
     HEX1: hexa7seg port map(
         hexa => placar2,
-        sseg => placar2p
+        sseg => placar2p_not
     );
+
+    placar2p <= placar2p_not;
 end architecture;
