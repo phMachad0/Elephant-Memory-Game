@@ -25,9 +25,13 @@ entity fluxo_dados is
         jogada_display 	            : out std_logic;
         fim_jogo 	                : out std_logic;
         time_out 	                : out std_logic;
+        animal_mem 	                : out std_logic_vector (3 downto 0);
+        jogador_vez 	            : out std_logic;
         par_correto 	            : out std_logic;
         pontos_jogador1 	        : out std_logic_vector (3 downto 0);
         pontos_jogador2 	        : out std_logic_vector (3 downto 0);
+        posicao_carta1 	            : out std_logic_vector (4 downto 0);
+        posicao_carta2 	            : out std_logic_vector (4 downto 0);
         pontos_total                : out std_logic_vector (3 downto 0)
     );
 end entity fluxo_dados;
@@ -435,4 +439,8 @@ begin
 			  sinal => s_sinal_carta,
 			  pulso => jogada_carta
         );
+
+    animal_mem <= s_animal_mem;
+    posicao_carta1 <= s_escolha1;
+    posicao_carta2 <= s_escolha2;
 end architecture estrutural;

@@ -13,7 +13,8 @@ entity elephant_memory is
         db_estado1: out std_logic_vector(6 downto 0);
         placar1: out std_logic_vector (6 downto 0);
         placar2: out std_logic_vector (6 downto 0);
-        total: out std_logic_vector (6 downto 0)
+        total: out std_logic_vector (6 downto 0);
+        display: out std_logic_vector (41 downto 0) 
     );
 end elephant_memory;
 
@@ -41,16 +42,20 @@ architecture elephant_memory_arch of elephant_memory is
             jogada_display 	            : out std_logic;
             fim_jogo 	                : out std_logic;
             time_out 	                : out std_logic;
+            animal_mem 	                : out std_logic_vector (3 downto 0);
+            jogador_vez	                : out std_logic;
             par_correto 	            : out std_logic;
             pontos_jogador1 	        : out std_logic_vector (3 downto 0);
             pontos_jogador2 	        : out std_logic_vector (3 downto 0);
+            posicao_carta1 	            : out std_logic_vector (4 downto 0);
+            posicao_carta2 	            : out std_logic_vector (4 downto 0);
             pontos_total                : out std_logic_vector (3 downto 0)
         );
     end component;
 
     component unidade_controle is
         port (
-            --entradas basicas
+        --entradas basicas
         clock : in std_logic;
         reset : in std_logic;
         iniciar : in std_logic;
@@ -63,6 +68,7 @@ architecture elephant_memory_arch of elephant_memory is
         conflito_mem : in std_logic;    --indica se a carta selecionada ja foi "eliminada" previamente
         igual_selecao : in std_logic;   --indica se uma unica carta foi selecionada duas vezes
         par_correto : in std_logic;     --indica se as duas cartas registradas formam um par
+        fim_display : in std_logic;  
 		
         
         --saida para zerar
@@ -93,8 +99,31 @@ architecture elephant_memory_arch of elephant_memory is
         
         --depuracao
 		db_esgotou : out std_logic;
-        db_estado : out std_logic_vector(7 downto 0)
+        db_estado : out std_logic_vector(7 downto 0);
+
+        opcode : out std_logic_vector(3 downto 0)
         );
+    end component;
+
+    component circuito_display is
+    port(
+        --Entradas basicas
+        clock: in std_logic;
+        reset: in std_logic;
+        --Entradas especiais
+        opcode: in std_logic_vector(3 downto 0);
+        end_animal: in std_logic_vector(3 downto 0);
+        jogador_vez: in std_logic;
+        posicao_carta1: in std_logic_vector(4 downto 0);
+        posicao_carta2: in std_logic_vector(4 downto 0);
+        placar1: in std_logic_vector(3 downto 0);
+        placar2: in std_logic_vector(3 downto 0);
+
+        --Saidas
+        display: out std_logic_vector(41 downto 0);
+        fim_display: out std_logic
+    );
+
     end component;
 
     component hexa7seg is
@@ -111,10 +140,18 @@ architecture elephant_memory_arch of elephant_memory is
     signal conta_player_sig, escreve_sig, jogada_sel_mux_sig, troca_jogador_sig: std_logic;
     signal time_out_sig, zera_timeout_sig: std_logic;
     signal db_esgotou_sig: std_logic;
+    signal jogadr_vez_sig: std_logic;
     signal db_estado_sig: std_logic_vector(7 downto 0);
 
     --Sinais exclusivos do FD
     signal pontos_jogador1_sig, pontos_jogador2_sig, pontos_total_sig : std_logic_vector(3 downto 0);
+
+    signal posicao_carta1_sig, posicao_carta2_sig : std_logic_vector(4 downto 0);
+
+    signal opcode_s, s_end_animal : std_logic_vector(3 downto 0);
+
+    signal fim_display_sig : std_logic;
+
 begin
     UC: unidade_controle port map(
         clock => clock,
@@ -127,6 +164,8 @@ begin
         igual_selecao => igual_selecao_sig,
         par_correto => par_correto_sig,
         zera_regs => zera_regs_sig,
+        opcode => opcode_s,
+        fim_display => fim_display_sig,
         reg_en_display => reg_en_display_sig,
         reg_en_carta => reg_en_carta_sig,
         reg_en_jogada1 => reg_en_jogada1_sig,
@@ -165,34 +204,27 @@ begin
         jogada_display => jogada_display_sig,
         fim_jogo => fim_jogo_sig,
         time_out => time_out_sig,
+        animal_mem => s_end_animal,
+        jogador_vez => jogadr_vez_sig,
         par_correto => par_correto_sig,
         pontos_jogador1 => pontos_jogador1_sig,
         pontos_jogador2 => pontos_jogador2_sig,
+        posicao_carta1 => posicao_carta1_sig,
+        posicao_carta2 => posicao_carta2_sig,
         pontos_total => pontos_total_sig
     );
 
-    HEX0: hexa7seg port map(
-        hexa => db_estado_sig(3 downto 0),
-        sseg => db_estado0
-    );
-
-    HEX1: hexa7seg port map(
-        hexa => db_estado_sig(7 downto 4),
-        sseg => db_estado1
-    );
-    
-    HEX2: hexa7seg port map(
-        hexa => pontos_jogador1_sig,
-        sseg => placar1
-    );
-    
-    HEX3: hexa7seg port map(
-        hexa => pontos_jogador2_sig,
-        sseg => placar2
-    );
-
-    HEX4: hexa7seg port map(
-        hexa => pontos_total_sig,
-        sseg => total
+    CIRCUITO_DISPLAY_dut: circuito_display port map(
+        clock =>clock ,
+        reset => reset,
+        opcode => opcode_s,
+        end_animal => s_end_animal,
+        jogador_vez => jogadr_vez_sig,
+        posicao_carta1 => posicao_carta1_sig,
+        posicao_carta2 => posicao_carta2_sig,
+        placar1 => pontos_jogador1_sig,
+        placar2 => pontos_jogador2_sig,
+        display => display,
+        fim_display => fim_display_sig
     );
 end architecture;
