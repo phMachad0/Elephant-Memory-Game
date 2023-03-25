@@ -21,6 +21,7 @@ end entity;
 
 architecture arch_banco_reg of banco_registradores is
     signal ent_s  : std_logic_vector(31 downto 0) := "00000000000000000000000000000000";
+    signal ent_s_show : std_logic_vector(31 downto 0);
     signal end1_s : integer range 0 to 32;
     signal end2_s : integer range 0 to 32;
 begin
@@ -35,15 +36,11 @@ begin
                 ent_s(end2_s) <= '1';
             elsif reset='0' and escolhe_endereco='0' and escreve='1' then
                 ent_s(end1_s) <= '1';
-            elsif reset='0' and frequencia='1' and pisca='1' then
-                ent_s(end1_s) <= '1';
-            elsif reset='0' and frequencia='0' and pisca='1' then
-                ent_s(end1_s) <= '0';
             elsif reset='1' then
                 ent_s <= "00000000000000000000000000000000";
             end if;
         end if;
-    end process;
+    end process;     
     
     dado_saida <= (ent_s(6 downto 0) & ent_s(14 downto 8) & ent_s(22 downto 16) & ent_s(30 downto 24));
 end architecture arch_banco_reg;
