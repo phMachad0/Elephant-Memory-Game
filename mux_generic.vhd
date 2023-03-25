@@ -28,5 +28,5 @@ end entity mux_generic;
 
 architecture arch_mux of mux_generic is
 begin
-    Y <= I((dado_bits*to_integer((unsigned(SEL)+1)) - 1) downto to_integer(unsigned(SEL))*dado_bits);
+    Y <= I((dado_bits*(to_integer(unsigned(SEL))+1) - 1) downto to_integer(unsigned(SEL))*dado_bits);
 end architecture arch_mux;
