@@ -83,4 +83,4 @@ end architecture;
 -- C (nada)
 -- D (nada)
 -- E (nada)
--- F finalizado/esgotado
+-- F finalizado
