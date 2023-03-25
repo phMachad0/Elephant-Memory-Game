@@ -101,7 +101,7 @@ begin
         conflito_display1   when Eatual = verifica_conflito1 and conflito_mem='1' else
         animal1_display     when Eatual = verifica_conflito1 and conflito_mem='0' else
         reset_timeout2      when Eatual = animal1_display and fim_display = '1' else
-        espera2             when (Eatual = reset_timeout2) or (Eatual = espera2 and jogada_display='0' and jogada_carta='0' and time_out='0') or Eatual=registra_display2 or (Eatual=conflito_display2 and fim_display = '1') or (Eatual=conflito_display) else
+        espera2             when (Eatual = reset_timeout2) or (Eatual = espera2 and jogada_display='0' and jogada_carta='0' and time_out='0') or Eatual=registra_display2 or (Eatual=conflito_display2 and fim_display = '1') or (Eatual=conflito_display and fim_display = '1') else
         registra_display2   when Eatual=espera2 and jogada_display='1' else
         registra_carta2     when Eatual=espera2 and jogada_carta='1' else
         registra_jogada2    when Eatual = registra_carta2 else
