@@ -126,6 +126,7 @@ architecture estrutural of fluxo_dados is
     component ram_32x4 is
         port (
             clk          : in  std_logic;
+            reset        : in  std_logic;
             endereco     : in  std_logic_vector(4 downto 0);
             dado_entrada : in  std_logic_vector(3 downto 0);
             we           : in  std_logic;
@@ -303,6 +304,7 @@ begin
     memoria: entity work.ram_32x4 (ram_modelsim) -- usar arquitetura para ModelSim
         port map (
             clk          => clock,
+            reset        => zera_regs,
             endereco     => s_endereco,
             dado_entrada => s_invalid,
             we           => s_not_escreve,-- we ativo em baixo

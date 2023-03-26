@@ -20,6 +20,7 @@ use ieee.numeric_std.all;
 entity ram_32x4 is
    port (       
        clk          : in  std_logic;
+       reset        : in  std_logic;
        endereco     : in  std_logic_vector(4 downto 0);
        dado_entrada : in  std_logic_vector(3 downto 0);
        we           : in  std_logic;
@@ -98,9 +99,44 @@ architecture ram_modelsim of ram_32x4 is
   
 begin
 
-  process(clk)
+  process(clk, reset)
   begin
-    if (clk = '1' and clk'event) then
+    if (reset='1') then
+      memoria <= (
+                      "0001", -- posicao 0 (00000)
+                      "0010", -- posicao 1 (00001)
+                      "0011", -- posicao 2 (00010)
+                      "0100", -- posicao 3 (00011)
+                      "0101", -- posicao 4 (00100)
+                      "0110", -- posicao 5 (00101)
+                      "0111", -- posicao 6 (00110)
+                      "1111", -- posicao 7 (00111) (invalida)
+                      "1000", -- posicao 8 (01000)
+                      "1001", -- posicao 9 (01001)
+                      "1010", -- posicao 10 (01010)
+                      "1011", -- posicao 11 (01011)
+                      "1100", -- posicao 12 (01100)
+                      "1101", -- posicao 13 (01101)
+                      "1110", -- posicao 14 (01110)
+                      "1111", -- posicao 15 (01111) (invalida)
+                      "0001", -- posicao 16 (10000)
+                      "0010", -- posicao 17 (10001)
+                      "0011", -- posicao 18 (10010)
+                      "0100", -- posicao 19 (10011)
+                      "0101", -- posicao 20 (10100)
+                      "0110", -- posicao 21 (10101)
+                      "0111", -- posicao 22 (10110)
+                      "1111", -- posicao 23 (10111)(invalida)
+                      "1000", -- posicao 24 (11000)
+                      "1001", -- posicao 25 (11001)
+                      "1010", -- posicao 26 (11010)
+                      "1011", -- posicao 27 (11011)
+                      "1100", -- posicao 28 (11100)
+                      "1101", -- posicao 29 (11101)
+                      "1110", -- posicao 30 (11110)
+                      "1111");  -- posicao 31 (11111)(invalida)
+
+    elsif (clk = '1' and clk'event) then
           if ce = '0' then -- dado armazenado na subida de "we" com "ce=0"
            
               -- Detecta ativacao de we (ativo baixo)
