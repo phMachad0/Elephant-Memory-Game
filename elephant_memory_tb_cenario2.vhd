@@ -109,7 +109,7 @@ begin
     botoes_carta_in <= "0000001"; -- posicao 0 da mem
     wait for 8*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 4;
     botoes_display_in <= "0100";
     wait for 8*clockPeriod;
@@ -119,7 +119,7 @@ begin
     wait for 8*clockPeriod;
     botoes_carta_in <= "0000000";
 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
 	 
     caso <= 5;
 	  wait for 8*clockPeriod;
@@ -130,14 +130,14 @@ begin
     botoes_carta_in <= "0000010";  -- posicao 1 da mem
     wait for 8*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 6;
     botoes_display_in <= "0100";
     wait for 8*clockPeriod;
     botoes_display_in <= "0000";	 
     wait for 8*clockPeriod;
     botoes_carta_in <= "0000010"; -- posicao 17 da mem
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
 
     caso <= 7;
@@ -161,7 +161,7 @@ begin
     botoes_carta_in <= "0000100"; -- posicao 2 da mem
     wait for 8*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 10;
     botoes_display_in <= "0100";
     wait for 8*clockPeriod;
@@ -170,7 +170,7 @@ begin
     botoes_carta_in <= "0000100"; -- posicao 18 da mem
     wait for 8*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
     ---- final do testbench
     assert false report "fim da simulacao" severity note;
     keep_simulating <= '0';

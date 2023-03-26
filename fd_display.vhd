@@ -116,7 +116,7 @@ architecture beh of FD_display is
     signal enderecos_memoria: std_logic_vector(39 downto 0);
     signal piscada: std_logic_vector(8 downto 0);
 
-    signal placar1p_not, placar2p_not: in std_logic_vector(6 downto 0)
+    signal placar1p_not, placar2p_not: std_logic_vector(6 downto 0);
 begin
     text_memory: ram_32x42 port map(
         clk => clock,
