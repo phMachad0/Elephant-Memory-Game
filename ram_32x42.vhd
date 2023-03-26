@@ -38,7 +38,7 @@ end entity ram_32x42;
 
 -- Dados iniciais em arquivo MIF (para sintese com Intel Quartus Prime) 
 architecture ram_mif of ram_32x42 is
-  type   arranjo_memoria is array(0 to 15) of std_logic_vector(3 downto 0);
+  type   arranjo_memoria is array(0 to 15) of std_logic_vector(41 downto 0);
   signal memoria : arranjo_memoria;
   
   -- Configuracao do Arquivo MIF
