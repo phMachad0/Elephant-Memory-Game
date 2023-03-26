@@ -202,17 +202,22 @@ begin
                      "00000010" when ini_jogo,    -- 02
                      "00000011" when reset_timeout1, -- 03
                      "00000100" when reset_timeout2, -- 04
+                     "00000101" when animal1_display, -- 05
+                     "00000110" when animal2_display, -- 06
+                     "00000111" when cartas_sel_display, -- 07
+                     "00001000" when errado_display, -- 08
+                     "00001001" when certo_display, -- 09
                      "00010000" when espera1,             -- 10
                      "00010001" when registra_display1,   -- 11
                      "00010010" when registra_carta1,     -- 12
                      "00010011" when registra_jogada1,    -- 13
-                     "00010011" when verifica_conflito1,  -- 14
+                     "00010100" when verifica_conflito1,  -- 14
 
                      "00100000" when espera2,             -- 20
                      "00100001" when registra_display2,   -- 21
                      "00100010" when registra_carta2,     -- 22
                      "00100011" when registra_jogada2,    -- 23
-                     "00100011" when verifica_conflito2,  -- 24
+                     "00100100" when verifica_conflito2,  -- 24
                      
                      "01000000" when verifica_selecao, -- 40
                      "01000001" when registra_par1,    -- 41
@@ -220,7 +225,8 @@ begin
 
                      "01110000" when verifica_pares,  -- 70
                      "01110001" when escreve_mem1,    -- 71
-                     "01110010" when escreve_mem2,    -- 72
+                     "01110010" when escreve_mem2,    -- 72                     
+                     "01110011" when registra_display,    -- 73                    
 
                      "10101010" when proximo_jogador, -- AA
                      "11101110" when esgotado,        -- EE
