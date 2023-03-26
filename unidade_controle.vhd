@@ -236,8 +236,8 @@ begin
                      "11010000" when animal1_display, -- D0
                      "11010001" when animal2_display, -- D1
                      "11011111" when cartas_sel_display, -- DF
-                     "11011100" when errado_display, -- DC
-                     "11011110" when certo_display, -- DE
+                     "11011110" when errado_display, -- DE
+                     "11011100" when certo_display, -- DC
                      "11010111" when conflito_display1, -- D7 
                      "11011000" when conflito_display2, -- D8
                      "11011001" when conflito_display,  -- D9
