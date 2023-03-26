@@ -96,126 +96,126 @@ begin
     iniciar_in <= '0';
     
     -- espera para inicio dos testes
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     wait until falling_edge(clk_in);
 
     -- Cenario de Teste
 
     caso <= 3;
     botoes_display_in <= "0001";
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000001"; -- posicao 0 da mem
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 16*clockPeriod;
+    wait for 15*clockPeriod;
     caso <= 4;
     botoes_display_in <= "0100";
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000001"; -- posicao 16 da mem
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
 
-    wait for 16*clockPeriod;
+    wait for 15*clockPeriod;
 	 
     caso <= 5;
-	  wait for 8*clockPeriod;
+	  wait for 15*clockPeriod;
     botoes_display_in <= "0001";
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000010";  -- posicao 1 da mem
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 16*clockPeriod;
+    wait for 15*clockPeriod;
     caso <= 6;
     botoes_display_in <= "0100";
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000010"; -- posicao 17 da mem
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
 
-    wait for 16*clockPeriod;
+    wait for 15*clockPeriod;
 
     caso <= 7;
     botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000010"; -- posicao 1 da mem
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 16*clockPeriod;
+	  wait for 15*clockPeriod;
     caso <= 8;
     botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0001000"; -- posicao 3 da mem
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 16*clockPeriod;
+	  wait for 15*clockPeriod;
     caso <= 9;
     botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0001000"; -- posicao 3 da mem
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 16*clockPeriod;
+	  wait for 15*clockPeriod;
     caso <= 10;
     botoes_display_in <= "0100"; 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0001000"; -- posicao 19 da mem
-    wait for 16*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
 
     caso <= 11;
-	  wait for 8*clockPeriod;
+	  wait for 15*clockPeriod;
     botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0010000"; -- posicao 4 da mem
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 16*clockPeriod;
+	  wait for 15*clockPeriod;
     caso <= 12;
     botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0100000"; -- posicao 5 da mem
-    wait for 16*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
 
     caso <= 13;
-	  wait for 8*clockPeriod;
+	  wait for 15*clockPeriod;
     botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0010000"; -- posicao 4 da mem
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 16*clockPeriod;
+	  wait for 15*clockPeriod;
     caso <= 14;
     botoes_display_in <= "0100"; 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0010000"; -- posicao 20 da mem
-    wait for 8*clockPeriod;
+    wait for 15*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 16*clockPeriod;
+    wait for 15*clockPeriod;
 
 
     ---- final do testbench
