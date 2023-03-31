@@ -135,7 +135,7 @@ begin
     );
     placar_display <= idle_display & placar1p & placar2p;   
 
-    conta_tempo_texto: contador_m generic map(m => 4) port map(
+    conta_tempo_texto: contador_m generic map(m => 1000) port map(
         clock   => clock ,
         zera_as => reset,
         zera_s  => zera_timer_texto,
@@ -182,12 +182,12 @@ begin
         hexa => placar1,
         sseg => placar1p_not
     );
-    placar1p <= placar1p_not;
+    placar1p <= not placar1p_not;
 
     HEX1: hexa7seg port map(
         hexa => placar2,
         sseg => placar2p_not
     );
 
-    placar2p <= placar2p_not;
+    placar2p <= not placar2p_not;
 end architecture;

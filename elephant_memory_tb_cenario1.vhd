@@ -26,11 +26,8 @@ architecture tb of elephant_memory_tb_cenario1 is
         iniciar: in std_logic;
         botoes_display: in std_logic_vector(3 downto 0);
         botoes_carta: in std_logic_vector(6 downto 0);
-        db_estado0: out std_logic_vector(6 downto 0);
-        db_estado1: out std_logic_vector(6 downto 0);
-        placar1: out std_logic_vector (6 downto 0);
-        placar2: out std_logic_vector (6 downto 0);
-        total: out std_logic_vector (6 downto 0)
+		  display: out std_logic_vector (41 downto 0) 
+
     );
   end component;
   ---- Declaracao de sinais de entrada para conectar o componente
@@ -65,12 +62,7 @@ begin
         reset => rst_in,
         iniciar => iniciar_in,
         botoes_display => botoes_display_in,
-        botoes_carta => botoes_carta_in,
-        db_estado0 => db_estado0_out,
-        db_estado1 => db_estado1_out,
-        placar1 => placar1_out,
-        placar2 => placar2_out,
-        total => total_out
+        botoes_carta => botoes_carta_in
        );
  
   ---- Gera sinais de estimulo para a simulacao

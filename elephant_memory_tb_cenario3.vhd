@@ -25,12 +25,8 @@ architecture tb of elephant_memory_tb_cenario3 is
         reset: in std_logic;
         iniciar: in std_logic;
         botoes_display: in std_logic_vector(3 downto 0);
-        botoes_carta: in std_logic_vector(6 downto 0);
-        db_estado0: out std_logic_vector(6 downto 0);
-        db_estado1: out std_logic_vector(6 downto 0);
-        placar1: out std_logic_vector (6 downto 0);
-        placar2: out std_logic_vector (6 downto 0);
-        total: out std_logic_vector (6 downto 0)
+        botoes_carta: in std_logic_vector(6 downto 0)
+
     );
   end component;
   ---- Declaracao de sinais de entrada para conectar o componente
@@ -65,12 +61,7 @@ begin
         reset => rst_in,
         iniciar => iniciar_in,
         botoes_display => botoes_display_in,
-        botoes_carta => botoes_carta_in,
-        db_estado0 => db_estado0_out,
-        db_estado1 => db_estado1_out,
-        placar1 => placar1_out,
-        placar2 => placar2_out,
-        total => total_out
+        botoes_carta => botoes_carta_in
        );
  
   ---- Gera sinais de estimulo para a simulacao
@@ -96,278 +87,278 @@ begin
     iniciar_in <= '0';
     
     -- espera para inicio dos testes
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     wait until falling_edge(clk_in);
 
     -- Cenario de Teste
 
     caso <= 3;
     botoes_display_in <= "0001";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000001"; -- posicao 0 da mem
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 4;
     botoes_display_in <= "0100";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000001"; -- posicao 16 da mem
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
 	 
     caso <= 5;
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
     botoes_display_in <= "0001";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000010";  -- posicao 1 da mem
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 6;
     botoes_display_in <= "0100";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000010"; -- posicao 17 da mem
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 7;
     botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000100"; -- posicao 2 da mem
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 8;
     botoes_display_in <= "0100";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000100"; -- posicao 18 da mem
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     caso <= 9;
     botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0001000"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 10;
     botoes_display_in <= "0100";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0001000"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     caso <= 11;
     botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0010000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 12;
     botoes_display_in <= "0100";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0010000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     caso <= 13;
     botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0100000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 14;
     botoes_display_in <= "0100";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0100000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     caso <= 15;
     botoes_display_in <= "0001"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "1000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 16;
     botoes_display_in <= "0100";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "1000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     caso <= 17;
     botoes_display_in <= "0010"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000001";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 18;
     botoes_display_in <= "1000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000001";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     caso <= 19;
     botoes_display_in <= "0010"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000010";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 20;
     botoes_display_in <= "1000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000010";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     caso <= 21;
     botoes_display_in <= "0010"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000100";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 22;
     botoes_display_in <= "1000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000100";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     caso <= 23;
     botoes_display_in <= "0010"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0001000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 24;
     botoes_display_in <= "1000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0001000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     caso <= 25;
     botoes_display_in <= "0010"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0010000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 26;
     botoes_display_in <= "1000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0010000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     caso <= 27;
     botoes_display_in <= "0010"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0100000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 28;
     botoes_display_in <= "1000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0100000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     caso <= 29;
     botoes_display_in <= "0010"; 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "1000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     caso <= 30;
     botoes_display_in <= "1000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_display_in <= "0000";	 
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "1000000";
-    wait for 8*clockPeriod;
+    wait for 16*clockPeriod;
     botoes_carta_in <= "0000000";
-	  wait for 8*clockPeriod;
+	  wait for 16*clockPeriod;
 
     ---- final do testbench
     assert false report "fim da simulacao" severity note;

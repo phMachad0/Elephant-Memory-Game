@@ -196,6 +196,8 @@ architecture estrutural of fluxo_dados is
     signal s_animal_chute2                  : std_logic_vector (3 downto 0);
     signal s_sinal_display                  : std_logic;
     signal s_sinal_carta                    : std_logic;
+	 signal pontos_jog1_sig                  : std_logic_vector(3 downto 0);
+	 signal pontos_jog2_sig                  : std_logic_vector(3 downto 0);
 
     
 begin
@@ -380,7 +382,7 @@ begin
             conta => troca_jogador,
             Q => s_seleciona_jogador
         );  
-
+		  
     demux_dut: demux
         port map(
             SEL => s_seleciona_jogador,
@@ -396,8 +398,9 @@ begin
             zera_as => zera_regs,
             zera_s => '0',
             conta => s_conta_ponto_jogador1,
-            Q => pontos_jogador1
+            Q => pontos_jog1_sig
         ); 
+		  pontos_jogador1 <= pontos_jog1_sig;
 
     contador_pontos_jogador2: contador_m 
         generic map (M => 15) 
@@ -406,8 +409,9 @@ begin
             zera_as => zera_regs,
             zera_s => '0',
             conta => s_conta_ponto_jogador2,
-            Q => pontos_jogador2
+            Q => pontos_jog2_sig
         ); 
+		  pontos_jogador2 <= pontos_jog2_sig;
 
     contador_pares_encontrados: contador_m 
         generic map (M => 15) 
@@ -441,6 +445,25 @@ begin
 			  sinal => s_sinal_carta,
 			  pulso => jogada_carta
         );
+		  
+		comparador_pontuacao: comparador_4bits
+    port map(
+        i_A3   => pontos_jog1_sig(3),
+        i_B3   => pontos_jog2_sig(3),
+        i_A2   => pontos_jog1_sig(2),
+        i_B2   => pontos_jog2_sig(2),
+        i_A1   => pontos_jog1_sig(1),
+        i_B1   => pontos_jog2_sig(1),
+        i_A0   => pontos_jog1_sig(0),
+        i_B0   => pontos_jog2_sig(0),
+        i_AGTB => '0',
+        i_ALTB => '0',
+        i_AEQB => '1',
+        o_AGTB => open,
+        o_ALTB => jogador_vez,
+        o_AEQB => open
+    );
+
 
     animal_mem <= s_animal_mem;
     posicao_carta1 <= s_escolha1;

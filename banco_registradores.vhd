@@ -35,10 +35,6 @@ begin
                 ent_s(end2_s) <= '1';
             elsif reset='0' and escolhe_endereco='0' and escreve='1' then
                 ent_s(end1_s) <= '1';
-            elsif reset='0' and frequencia='1' and pisca='1' then
-                ent_s(end1_s) <= '1';
-            elsif reset='0' and frequencia='0' and pisca='1' then
-                ent_s(end1_s) <= '0';
             elsif reset='1' then
                 ent_s <= "00000000000000000000000000000000";
             end if;

@@ -8,12 +8,6 @@ entity elephant_memory is
         iniciar: in std_logic;
         botoes_display: in std_logic_vector(3 downto 0);
         botoes_carta: in std_logic_vector(6 downto 0);
-
-        db_estado0: out std_logic_vector(6 downto 0);
-        db_estado1: out std_logic_vector(6 downto 0);
-        placar1: out std_logic_vector (6 downto 0);
-        placar2: out std_logic_vector (6 downto 0);
-        total: out std_logic_vector (6 downto 0);
         display: out std_logic_vector (41 downto 0) 
     );
 end elephant_memory;
@@ -151,6 +145,10 @@ architecture elephant_memory_arch of elephant_memory is
     signal opcode_s, s_end_animal : std_logic_vector(3 downto 0);
 
     signal fim_display_sig : std_logic;
+	 
+	 signal botoes_display_not : std_logic_vector(3 downto 0);
+	 signal botoes_cartas_not : std_logic_vector(6 downto 0);
+	 signal display_not:  std_logic_vector (41 downto 0);
 
 begin
     UC: unidade_controle port map(
@@ -185,7 +183,7 @@ begin
     FD: fluxo_dados port map(
         clock => clock,	            
         escolha_display => botoes_display,
-        escolha_carta => botoes_carta,
+        escolha_carta => botoes_cartas_not,
         reg_en_display => reg_en_display_sig,
         reg_en_carta => reg_en_carta_sig,
         reg_en_jogada1 => reg_en_jogada1_sig,
@@ -213,6 +211,7 @@ begin
         posicao_carta2 => posicao_carta2_sig,
         pontos_total => pontos_total_sig
     );
+	 botoes_cartas_not <= not botoes_carta;
 
     CIRCUITO_DISPLAY_dut: circuito_display port map(
         clock =>clock ,
@@ -224,7 +223,8 @@ begin
         posicao_carta2 => posicao_carta2_sig,
         placar1 => pontos_jogador1_sig,
         placar2 => pontos_jogador2_sig,
-        display => display,
+        display => display_not,
         fim_display => fim_display_sig
     );
+	 display <= not display_not;
 end architecture;
