@@ -43,7 +43,18 @@ architecture elephant_memory_arch of elephant_memory is
             pontos_jogador2 	        : out std_logic_vector (3 downto 0);
             posicao_carta1 	            : out std_logic_vector (4 downto 0);
             posicao_carta2 	            : out std_logic_vector (4 downto 0);
-            pontos_total                : out std_logic_vector (3 downto 0)
+            pontos_total                : out std_logic_vector (3 downto 0);
+
+            --Entradas e saídas da geração aleatória:
+            troca_posicao: in std_logic;
+            endereco_random_sel: in std_logic;
+            en_random_generator: in std_logic;
+            registra_random: in std_logic;
+            zera_time_prep: in std_logic;
+            en_time_prep: in std_logic;
+
+            pos_random_invalida: out std_logic;
+            fim_time_prep:       out std_logic
         );
     end component;
 
@@ -95,7 +106,18 @@ architecture elephant_memory_arch of elephant_memory is
 		db_esgotou : out std_logic;
         db_estado : out std_logic_vector(7 downto 0);
 
-        opcode : out std_logic_vector(3 downto 0)
+        opcode : out std_logic_vector(3 downto 0);
+
+        --Entradas e saídas da geração aleatória:
+        troca_posicao: out std_logic;
+        endereco_random_sel: out std_logic;
+        en_random_generator: out std_logic;
+        registra_random: out std_logic;
+        zera_time_prep: out std_logic;
+        en_time_prep: out std_logic;
+
+        pos_random_invalida: in std_logic;
+        fim_time_prep:       in std_logic
         );
     end component;
 
@@ -150,6 +172,18 @@ architecture elephant_memory_arch of elephant_memory is
 	 signal botoes_cartas_not : std_logic_vector(6 downto 0);
 	 signal display_not:  std_logic_vector (41 downto 0);
 
+
+     --Sinais da geracao aleatoria
+    signal troca_posicao_sig: std_logic;
+    signal endereco_random_sel_sig: std_logic;
+    signal en_random_generator_sig: std_logic;
+    signal registra_random_sig: std_logic;
+    signal zera_time_prep_sig: std_logic;
+    signal en_time_prep_sig: std_logic;
+
+    signal pos_random_invalida_sig: std_logic;
+    signal fim_time_prep_sig:       std_logic;
+
 begin
     UC: unidade_controle port map(
         clock => clock,
@@ -177,7 +211,17 @@ begin
         time_out => time_out_sig,
         zera_timeout => zera_timeout_sig,
         db_esgotou => db_esgotou_sig,
-        db_estado => db_estado_sig
+        db_estado => db_estado_sig,
+
+        troca_posicao => troca_posicao_sig,
+        endereco_random_sel => endereco_random_sel_sig,
+        en_random_generator => en_random_generator_sig,
+        registra_random => registra_random_sig,
+        zera_time_prep => zera_time_prep_sig,
+        en_time_prep => en_time_prep_sig,
+
+        pos_random_invalida => pos_random_invalida_sig,
+        fim_time_prep => fim_time_prep_sig
     );
 
     FD: fluxo_dados port map(
@@ -209,7 +253,17 @@ begin
         pontos_jogador2 => pontos_jogador2_sig,
         posicao_carta1 => posicao_carta1_sig,
         posicao_carta2 => posicao_carta2_sig,
-        pontos_total => pontos_total_sig
+        pontos_total => pontos_total_sig,
+
+        troca_posicao => troca_posicao_sig,
+        endereco_random_sel => endereco_random_sel_sig,
+        en_random_generator => en_random_generator_sig,
+        registra_random => registra_random_sig,
+        zera_time_prep => zera_time_prep_sig,
+        en_time_prep => en_time_prep_sig,
+
+        pos_random_invalida => pos_random_invalida_sig,
+        fim_time_prep => fim_time_prep_sig
     );
 	 botoes_cartas_not <= not botoes_carta;
 
