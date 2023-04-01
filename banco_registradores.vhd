@@ -23,6 +23,8 @@ architecture arch_banco_reg of banco_registradores is
     signal ent_s  : std_logic_vector(31 downto 0) := "00000000000000000000000000000000";
     signal end1_s : integer range 0 to 32;
     signal end2_s : integer range 0 to 32;
+    signal ent_pisca: std_logic_vector(31 downto 0);
+    signal ent_show: std_logic_vector(31 downto 0);
 begin
     process (clock)
     begin   
@@ -40,6 +42,10 @@ begin
             end if;
         end if;
     end process;
+    GEN: for i in 0 to 31 generate
+        ent_show(i) <= frequencia when end1_s = i or (end2_s = i and escolhe_endereco = '1') else
+                        ent_s(i);
+    end generate;
     
-    dado_saida <= (ent_s(6 downto 0) & ent_s(14 downto 8) & ent_s(22 downto 16) & ent_s(30 downto 24));
+    dado_saida <= (ent_show(6 downto 0) & ent_show(14 downto 8) & ent_show(22 downto 16) & ent_show(30 downto 24));
 end architecture arch_banco_reg;
