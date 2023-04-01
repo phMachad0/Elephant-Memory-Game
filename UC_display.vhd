@@ -41,10 +41,10 @@ begin
                     "100" when opcode="0111" else
                     "101" when opcode="1111" and jogador_vez='0' else
                     "110" when opcode="1111" and jogador_vez='1' else
-                    "111";
+                    "111" when opcode="0010";
                 
     with opcode select
-        mux_sel_display <= '1' when "0001" | "0101" | "0100" | "0110" | "0111" | "1111",
+        mux_sel_display <= '1' when "0001" | "0101" | "0100" | "0110" | "0111" | "1111" | "0010",
                            '0' when others; 
 
     with opcode select
@@ -69,14 +69,14 @@ end architecture;
 
 --Opcodes:
 -- 0 padrao
--- 1 start
+-- 1 inicial
 -- 2 preparacao
 -- 3 (nada)
 -- 4 carta invalida
 -- 5 animal1/animal2
 -- 6 certo
--- 7 errado
--- 8 registra1
+-- 7 errado/esgotado
+-- 8 registra_display
 -- 9 (nada)
 -- A espera2_display
 -- B cartas_sel_display
