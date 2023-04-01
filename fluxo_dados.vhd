@@ -32,7 +32,18 @@ entity fluxo_dados is
         pontos_jogador2 	        : out std_logic_vector (3 downto 0);
         posicao_carta1 	            : out std_logic_vector (4 downto 0);
         posicao_carta2 	            : out std_logic_vector (4 downto 0);
-        pontos_total                : out std_logic_vector (3 downto 0)
+        pontos_total                : out std_logic_vector (3 downto 0);
+
+        --Entradas e saídas da geração aleatória:
+        troca_posicao: in std_logic;
+        endereco_random_sel: in std_logic;
+        en_random_generator: in std_logic;
+        registra_random: in std_logic;
+        zera_time_prep: in std_logic;
+        en_time_prep: in std_logic;
+
+        pos_random_invalida: out std_logic;
+        fim_time_prep:       out std_logic
     );
 end entity fluxo_dados;
 
@@ -123,17 +134,20 @@ architecture estrutural of fluxo_dados is
         );
     end component;
 
-    component ram_32x4 is
-        port (
+
+    component ram_32x4_swap is
+        port (       
             clk          : in  std_logic;
             reset        : in  std_logic;
-            endereco     : in  std_logic_vector(4 downto 0);
+            endereco1    : in  std_logic_vector(4 downto 0);
+            endereco2    : in  std_logic_vector(4 downto 0);
             dado_entrada : in  std_logic_vector(3 downto 0);
             we           : in  std_logic;
             ce           : in  std_logic;
+            troca        : in  std_logic;
             dado_saida   : out std_logic_vector(3 downto 0)
-        );
-    end component;
+         );
+     end component;
 
     component registrador_n is
         generic (
@@ -180,6 +194,15 @@ architecture estrutural of fluxo_dados is
         );
     end component;
 
+    component random_generator_5bits is
+        port(
+            clock: in std_logic;
+            enable: in std_logic;
+            dado: out std_logic_vector(4 downto 0)
+        );
+    end component;
+    
+
     signal s_escolha_display_codififcado    : std_logic_vector (1 downto 0);
     signal s_escolha_carta_codififcado      : std_logic_vector (2 downto 0);
     signal s_posicao_escolhida              : std_logic_vector (4 downto 0);
@@ -196,9 +219,13 @@ architecture estrutural of fluxo_dados is
     signal s_animal_chute2                  : std_logic_vector (3 downto 0);
     signal s_sinal_display                  : std_logic;
     signal s_sinal_carta                    : std_logic;
-	 signal pontos_jog1_sig                  : std_logic_vector(3 downto 0);
-	 signal pontos_jog2_sig                  : std_logic_vector(3 downto 0);
-
+	signal pontos_jog1_sig                  : std_logic_vector(3 downto 0);
+	signal pontos_jog2_sig                  : std_logic_vector(3 downto 0);
+    
+    --Sinais da geracao aleatoria
+    signal endereco1_sig : std_logic_vector(4 downto 0);
+    signal endereco2_sig : std_logic_vector(4 downto 0);
+    signal random_endereco_sig : std_logic_vector(4 downto 0);
     
 begin
 
@@ -302,17 +329,84 @@ begin
             Y   => s_endereco
         );
 
-    --memoria: entity work.ram_32x4 (ram_mif)  -- usar esta linha para Intel Quartus
-    memoria: entity work.ram_32x4 (ram_modelsim) -- usar arquitetura para ModelSim
+    -------------------------------------------
+    --GERACAO ALEATORIA------------------------
+    -------------------------------------------
+
+    --apenas uma unica arquitetura
+    memoria: ram_32x4_swap 
         port map (
             clk          => clock,
             reset        => zera_regs,
-            endereco     => s_endereco,
+            endereco1    => endereco1_sig,
+            endereco2    => endereco2_sig,
             dado_entrada => s_invalid,
             we           => s_not_escreve,-- we ativo em baixo
             ce           => '0',
+            troca        => troca_posicao, --input do FD
             dado_saida   => s_animal_mem
         );
+
+    mux_random_addr: mux
+        generic map (
+            m => 5
+        )
+        port map(
+            SEL => endereco_random_sel, --input do FD
+            I   => s_endereco,
+            J   => random_endereco_sig,
+            Y   => endereco1_sig
+        );
+    
+    gerador_random: random_generator_5bits port map(
+        clock => clock,
+        enable => en_random_generator, --input do FD
+        dado => random_endereco_sig
+    );
+
+    reg_random_end: registrador_n
+        generic map(
+            N => 5
+        )
+        port map(
+            clock => clock,
+            clear => zera_regs, 
+            enable => registra_random, --input do FD
+            D => random_endereco_sig,
+            Q => endereco2_sig
+        );
+
+    comparador_pos_random_invalida: comparador_4bits
+        port map(
+            i_A3   => '0',
+            i_B3   => '0',
+            i_A2   => random_endereco_sig(2),
+            i_B2   => '1',
+            i_A1   => random_endereco_sig(1),
+            i_B1   => '1',
+            i_A0   => random_endereco_sig(0),
+            i_B0   => '1',
+            i_AGTB => '0',
+            i_ALTB => '0',
+            i_AEQB => '1',
+            o_AGTB => open, -- saidas nao usadas
+            o_ALTB => open,
+            o_AEQB => pos_random_invalida --output do FD
+        );
+
+    contador_preparacao: contador_m 
+        generic map (M => 500) 
+        port map (
+            clock => clock,
+            zera_as => zera_regs,
+            zera_s => zera_time_prep,  --input do FD
+            conta => en_time_prep,    --input do FD
+            fim => fim_time_prep       --output do FD
+        ); 
+
+    -----------------------------------------------------------
+    -----------------------------------------------------------
+    -----------------------------------------------------------
 
     comparador_invalid: comparador_4bits
         port map(
