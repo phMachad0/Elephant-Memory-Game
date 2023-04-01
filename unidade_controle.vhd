@@ -156,7 +156,7 @@ begin
         jogada_sel_mux <= '1' when verifica_conflito2 | registra_par2 | escreve_mem2 | animal2_display,
                           '0' when others;
     with Eatual select
-        escreve <=  '1' when escreve_mem1 | escreve_mem2,
+        escreve <=  '1' when escreve_mem1 | escreve_mem2 | troca_random,
                     '0' when others;
     with Eatual select
         conta_player <= '1' when escreve_mem1,
@@ -273,7 +273,15 @@ begin
                      "01110000" when verifica_pares,  -- 70
                      "01110001" when escreve_mem1,    -- 71
                      "01110010" when escreve_mem2,    -- 72                     
-                     "01110011" when registra_display,    -- 73                    
+                     "01110011" when registra_display,    -- 73
+                     
+                     
+                     "10000000" when verifica_random1, -- 80
+                     "10000001" when prox_random1, -- 81
+                     "10001010" when segundo_random, -- 8A
+                     "10000010" when verifica_random2, -- 82
+                     "10000011" when prox_random2, -- 83
+                     "10001111" when troca_random, -- 8F
 
 
                      "11010000" when animal1_display, -- D0

@@ -32,7 +32,7 @@ entity ram_32x4_swap is
 end entity ram_32x4_swap;
 
 -- Dados iniciais (para simulacao com Modelsim) 
-architecture ram_modelsim of ram_32x4 is
+architecture ram_modelsim of ram_32x4_swap is
   type   arranjo_memoria is array(0 to 31) of std_logic_vector(3 downto 0);
   signal memoria : arranjo_memoria := (
                                         "0001", -- posicao 0 (00000)
@@ -67,13 +67,15 @@ architecture ram_modelsim of ram_32x4 is
                                         "1101", -- posicao 29 (11101)
                                         "1110", -- posicao 30 (11110)
                                         "1111");  -- posicao 31 (11111)(invalida)
-                                        
+
+      
+    signal dado_troca1, dado_troca2: std_logic_vector(3 downto 0);                                  
   
 begin
 
   process(clk, reset)
   begin
-    if (reset='1) then
+    if (reset='1') then
       memoria <= (
         "0001", -- posicao 0 (00000)
         "0010", -- posicao 1 (00001)
@@ -112,7 +114,7 @@ begin
            
               -- Detecta ativacao de we (ativo baixo)
               if (we = '0') then 
-                if (troca='0') then
+                if (troca='1') then
                   memoria(to_integer(unsigned(endereco1))) <= dado_troca2;
                   memoria(to_integer(unsigned(endereco2))) <= dado_troca1;
                 else
