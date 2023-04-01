@@ -88,7 +88,7 @@ begin
     iniciar_in <= '0';
     
     -- espera para inicio dos testes
-    wait for 15*clockPeriod;
+    wait for 2100*clockPeriod;
     wait until falling_edge(clk_in);
 
     -- Cenario de Teste
