@@ -22,7 +22,7 @@ begin
         end if;
     end process;
 
-    GEN: for i in 3 to 27 generate
+    GEN: for i in 3 to 26 generate
             dado28prox(i+1) <= dado28(i);
         end generate;
 
