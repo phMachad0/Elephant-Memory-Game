@@ -170,6 +170,8 @@ architecture elephant_memory_arch of elephant_memory is
 	 
 	 signal botoes_display_not : std_logic_vector(3 downto 0);
 	 signal botoes_cartas_not : std_logic_vector(6 downto 0);
+	 signal reset_not : std_logic;
+	 signal iniciar_not : std_logic;
 	 signal display_not:  std_logic_vector (41 downto 0);
 
 
@@ -187,8 +189,8 @@ architecture elephant_memory_arch of elephant_memory is
 begin
     UC: unidade_controle port map(
         clock => clock,
-        reset => reset,
-        iniciar => iniciar,
+        reset => reset_not,
+        iniciar => iniciar_not,
         fim_jogo => fim_jogo_sig,
         jogada_display => jogada_display_sig,
         jogada_carta => jogada_carta_sig,
@@ -223,10 +225,12 @@ begin
         pos_random_invalida => pos_random_invalida_sig,
         fim_time_prep => fim_time_prep_sig
     );
+	 reset_not <= not reset;
+	 iniciar_not <= not iniciar;
 
     FD: fluxo_dados port map(
         clock => clock,	            
-        escolha_display => botoes_display,
+        escolha_display => botoes_display_not,
         escolha_carta => botoes_cartas_not,
         reg_en_display => reg_en_display_sig,
         reg_en_carta => reg_en_carta_sig,
@@ -266,10 +270,11 @@ begin
         fim_time_prep => fim_time_prep_sig
     );
 	 botoes_cartas_not <= not botoes_carta;
+	 botoes_display_not <= not botoes_display;
 
     CIRCUITO_DISPLAY_dut: circuito_display port map(
         clock =>clock ,
-        reset => reset,
+        reset => reset_not,
         opcode => opcode_s,
         end_animal => s_end_animal,
         jogador_vez => jogadr_vez_sig,

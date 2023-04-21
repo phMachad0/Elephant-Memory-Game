@@ -49,6 +49,10 @@ architecture tb of elephant_memory_tb_cenario1 is
   signal keep_simulating: std_logic := '0'; -- delimita o tempo de geração do clock
   constant clockPeriod : time := 20 ns;     -- frequencia 50MHz
   
+  signal iniciar_not: std_logic;
+  signal reset_not     : std_logic;
+  signal botoes_display_not  : std_logic_vector(3 downto 0);
+  signal botoes_carta_not  : std_logic_vector(6 downto 0);
 begin
   -- Gerador de clock: executa enquanto 'keep_simulating = 1', com o período especificado. 
   -- Quando keep_simulating=0, clock é interrompido, bem como a simulação de eventos
@@ -59,11 +63,15 @@ begin
        port map
        (
         clock => clk_in,
-        reset => rst_in,
-        iniciar => iniciar_in,
-        botoes_display => botoes_display_in,
-        botoes_carta => botoes_carta_in
+        reset => reset_not,
+        iniciar => iniciar_not,
+        botoes_display => botoes_display_not,
+        botoes_carta => botoes_carta_not
        );
+		 reset_not <= not rst_in;
+		 iniciar_not <= not iniciar_in;
+		 botoes_display_not <= not botoes_display_in;
+		 botoes_carta_not <= not botoes_carta_in;
  
   ---- Gera sinais de estimulo para a simulacao
   -- Cenario de Teste : acerta as 3 primeiras rodadas e erra na 3ª jogada da 4ª rodada
@@ -88,7 +96,7 @@ begin
     iniciar_in <= '0';
     
     -- espera para inicio dos testes
-    wait for 2100*clockPeriod;
+    wait for 3000*clockPeriod;
     wait until falling_edge(clk_in);
 
     -- Cenario de Teste

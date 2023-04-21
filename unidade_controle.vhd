@@ -101,18 +101,21 @@ begin
     Eprox <=
         inicial             when Eatual = inicial and iniciar='0' else
         preparacao          when (Eatual=inicial or Eatual=finalizado) and iniciar='1' else
-        
+        --Estados de embaralhamento
         verifica_random1    when Eatual = preparacao or Eatual = prox_random1 or (Eatual = troca_random and fim_time_prep = '0') else
+		  
         prox_random1        when Eatual = verifica_random1 and pos_random_invalida='1' else
         segundo_random      when Eatual = verifica_random1 and pos_random_invalida='0' else
         verifica_random2    when Eatual = segundo_random or Eatual = prox_random2      else
         prox_random2        when Eatual = verifica_random2 and pos_random_invalida ='1' else
         troca_random        when Eatual = verifica_random2 and pos_random_invalida ='0' else
-        
+        --Fim dos estados de embaralhamento
+		  
         ini_jogo            when Eatual = troca_random and fim_time_prep='1' else
-
-        reset_timeout1      when Eatual = ini_jogo else
-        espera1             when Eatual = reset_timeout1 or (Eatual = espera1 and jogada_display='0' and jogada_carta='0' and time_out='0') or Eatual = registra_display1 or (Eatual= conflito_display1 and fim_display = '1') else
+        reset_timeout1      when Eatual = ini_jogo else  
+        espera1             when Eatual = reset_timeout1 or (Eatual = espera1 and jogada_display='0' and jogada_carta='0' and time_out='0') 
+		  or Eatual = registra_display1 or (Eatual= conflito_display1 and fim_display = '1') else
+		  
         registra_display1   when Eatual = espera1 and jogada_display='1' else
         registra_carta1     when Eatual = espera1 and jogada_carta='1' else
         registra_jogada1    when Eatual = registra_carta1 else
@@ -120,7 +123,9 @@ begin
         conflito_display1   when Eatual = verifica_conflito1 and conflito_mem='1' else
         animal1_display     when Eatual = verifica_conflito1 and conflito_mem='0' else
         reset_timeout2      when Eatual = animal1_display and fim_display = '1' else
-        espera2             when (Eatual = reset_timeout2) or (Eatual = espera2 and jogada_display='0' and jogada_carta='0' and time_out='0') or Eatual=registra_display2 or (Eatual=conflito_display2 and fim_display = '1') or (Eatual=conflito_display and fim_display = '1') else
+        espera2             when (Eatual = reset_timeout2) or (Eatual = espera2 and jogada_display='0' and jogada_carta='0' and time_out='0') or Eatual=registra_display2 or (Eatual=conflito_display2 and fim_display = '1') 
+		  or (Eatual=conflito_display and fim_display = '1') else
+		  
         registra_display2   when Eatual=espera2 and jogada_display='1' else
         registra_carta2     when Eatual=espera2 and jogada_carta='1' else
         registra_jogada2    when Eatual = registra_carta2 else
@@ -156,7 +161,7 @@ begin
         jogada_sel_mux <= '1' when verifica_conflito2 | registra_par2 | escreve_mem2 | animal2_display,
                           '0' when others;
     with Eatual select
-        escreve <=  '1' when escreve_mem1 | escreve_mem2 | troca_random,
+        escreve <=  '1' when escreve_mem1 | escreve_mem2, | troca_random,
                     '0' when others;
     with Eatual select
         conta_player <= '1' when escreve_mem1,
