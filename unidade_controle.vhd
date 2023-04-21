@@ -161,7 +161,7 @@ begin
         jogada_sel_mux <= '1' when verifica_conflito2 | registra_par2 | escreve_mem2 | animal2_display,
                           '0' when others;
     with Eatual select
-        escreve <=  '1' when escreve_mem1 | escreve_mem2, | troca_random,
+        escreve <=  '1' when escreve_mem1 | escreve_mem2 | troca_random,
                     '0' when others;
     with Eatual select
         conta_player <= '1' when escreve_mem1,
