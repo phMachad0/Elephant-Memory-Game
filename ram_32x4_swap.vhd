@@ -17,50 +17,22 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity ram_32x4 is
+entity ram_32x4_swap is
    port (       
        clk          : in  std_logic;
        reset        : in  std_logic;
-       endereco     : in  std_logic_vector(4 downto 0);
+       endereco1    : in  std_logic_vector(4 downto 0);
+       endereco2    : in  std_logic_vector(4 downto 0);
        dado_entrada : in  std_logic_vector(3 downto 0);
        we           : in  std_logic;
        ce           : in  std_logic;
+       troca        : in  std_logic;
        dado_saida   : out std_logic_vector(3 downto 0)
     );
-end entity ram_32x4;
-
--- Dados iniciais em arquivo MIF (para sintese com Intel Quartus Prime) 
-architecture ram_mif of ram_32x4 is
-  type   arranjo_memoria is array(0 to 15) of std_logic_vector(3 downto 0);
-  signal memoria : arranjo_memoria;
-  
-  -- Configuracao do Arquivo MIF
-  attribute ram_init_file: string;
-  attribute ram_init_file of memoria: signal is "ram_conteudo_inicial.mif";
-  
-begin
-
-  process(clk)
-  begin
-    if (clk = '1' and clk'event) then
-          if ce = '0' then -- dado armazenado na subida de "we" com "ce=0"
-           
-              -- Detecta ativacao de we (ativo baixo)
-              if (we = '0') 
-                  then memoria(to_integer(unsigned(endereco))) <= dado_entrada;
-              end if;
-            
-          end if;
-      end if;
-  end process;
-
-  -- saida da memoria
-  dado_saida <= memoria(to_integer(unsigned(endereco)));
-  
-end architecture ram_mif;
+end entity ram_32x4_swap;
 
 -- Dados iniciais (para simulacao com Modelsim) 
-architecture ram_modelsim of ram_32x4 is
+architecture ram_modelsim of ram_32x4_swap is
   type   arranjo_memoria is array(0 to 31) of std_logic_vector(3 downto 0);
   signal memoria : arranjo_memoria := (
                                         "0000", -- posicao 0 (00000)
@@ -95,7 +67,9 @@ architecture ram_modelsim of ram_32x4 is
                                         "1100", -- posicao 29 (11101)
                                         "1101", -- posicao 30 (11110)
                                         "1111");  -- posicao 31 (11111)(invalida)
-                                        
+
+      
+    signal dado_troca1, dado_troca2: std_logic_vector(3 downto 0);                                  
   
 begin
 
@@ -103,7 +77,7 @@ begin
   begin
     if (reset='1') then
       memoria <= (
-                      "0000", -- posicao 0 (00000)
+        "0000", -- posicao 0 (00000)
                                         "0001", -- posicao 1 (00001)
                                         "0010", -- posicao 2 (00010)
                                         "0011", -- posicao 3 (00011)
@@ -135,20 +109,26 @@ begin
                                         "1100", -- posicao 29 (11101)
                                         "1101", -- posicao 30 (11110)
                                         "1111");  -- posicao 31 (11111)(invalida)
-
     elsif (clk = '1' and clk'event) then
           if ce = '0' then -- dado armazenado na subida de "we" com "ce=0"
            
               -- Detecta ativacao de we (ativo baixo)
-              if (we = '0') 
-                  then memoria(to_integer(unsigned(endereco))) <= dado_entrada;
-              end if;
-            
+              if (we = '0') then 
+                if (troca='1') then
+                  memoria(to_integer(unsigned(endereco1))) <= dado_troca2;
+                  memoria(to_integer(unsigned(endereco2))) <= dado_troca1;
+                else
+                  memoria(to_integer(unsigned(endereco1))) <= dado_entrada;
+                end if;
+              end if;          
           end if;
       end if;
   end process;
 
   -- saida da memoria
-  dado_saida <= memoria(to_integer(unsigned(endereco)));
+  dado_saida <= memoria(to_integer(unsigned(endereco1)));
+
+  dado_troca1 <= memoria(to_integer(unsigned(endereco1)));
+  dado_troca2 <= memoria(to_integer(unsigned(endereco2)));
 
 end architecture ram_modelsim;

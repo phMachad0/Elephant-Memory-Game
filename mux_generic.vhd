@@ -11,24 +11,22 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.math_real.all;
+use ieee.numeric_std.all;
 
-entity mux is
+entity mux_generic is
   generic(
-    constant M : integer := 4 
+    constant endereco_bits : integer := 4;
+    constant dado_bits : integer := 4
   );
-  port (
-    SEL : in  std_logic;
-    I   : in  std_logic_vector (M-1 downto 0);
-    J   : in  std_logic_vector (M-1 downto 0);
-    Y   : out std_logic_vector (M-1 downto 0)
-  );
-end entity mux;
 
-architecture arch_mux of mux is
+  port (
+    SEL : in  std_logic_vector(endereco_bits - 1 downto 0);
+    I : in std_logic_vector((2**endereco_bits)*dado_bits - 1 downto 0);
+    Y   : out std_logic_vector (dado_bits-1 downto 0)
+  );
+end entity mux_generic;
+
+architecture arch_mux of mux_generic is
 begin
-  with SEL select
-    Y <=
-    I when '0',
-    J when '1',
-    (M-1 downto 0 => '0') when others;
+    Y <= I((dado_bits*(to_integer(unsigned(SEL))+1) - 1) downto to_integer(unsigned(SEL))*dado_bits);
 end architecture arch_mux;
